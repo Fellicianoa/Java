@@ -1,0 +1,50 @@
+import Connection.ModuloConexao;
+import java.sql.*;
+import javax.swing.JOptionPane;
+
+public class Login extends javax.swing.JFrame {
+
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
+    public void Logar() {
+        String sql = "SELECT * FROM users WHERE name = ? and PASSWORD = ?";
+        try {
+            // as linhas abaixo preparam a consulta ao banco em função do que foi digitado nas caixas de texto
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, jTFLogin.getText());
+            pst.setString(2, jPass.getText());
+            // a linha abaixo executa a query
+            rs = pst.executeQuery();
+            // se existir user e senha
+            if (rs.next()) {
+                TelaPrincipal principal = new TelaPrincipal();
+                principal.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuario e/ou Senha Inválido!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    /**
+     * Creates new form Login
+     */
+    public Login() {
+        initComponents();
+        conexao = ModuloConexao.conector();
+        //System.out.println(conexao);
+        // alinha abaixo serve de apoio ao status da conexao
+        if (conexao != null) {
+            jLabel4.setText("Conectado no Banco");
+        } else {
+            jLabel4.setText("Não Conectado no Banco");
+        }
+
+    }
+    
+    No Botão logar
+      //chamando o metodo logar
+      Logar();
